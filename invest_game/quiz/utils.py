@@ -1,4 +1,6 @@
 import requests, random
+import re
+from urllib import request
 
 #이미 있는 단어 알기위해 단어목록 저장
 history = []
@@ -80,9 +82,6 @@ ans_arr = checkexists(query)
 # ans = findword(start + '*')
 
 ans_arr
-
-import re
-from urllib import request
 
 # 정규표현식으로 바꾸기
 results=[]

@@ -121,7 +121,7 @@ def view_quiz_result(request):
 
 
 
-def lookup_word(request):
-    query = request.GET.get('word', '')
-    result = find_word_definition(query)  # 이 함수는 단어 정의를 검색하는 함수로 대체해야 합니다.
-    return render(request, 'quiz/question.html', {'query': query, 'result': result})
+# def lookup_word(request):
+#     query = request.GET.get('word', '')
+#     result = find_word_definition(query)  # 이 함수는 단어 정의를 검색하는 함수로 대체해야 합니다.
+#     return render(request, 'quiz/question.html', {'query': query, 'result': result})

@@ -3,17 +3,6 @@
 <section class="quiz_frame">
   <progress class="progress" value="{{ question.su }}" max="8"></progress>
 
-  <form method="get" action="{% url 'answer_question' %}">
-    <input type="text" name="word" placeholder="단어를 입력하세요" />
-    <input type="submit" value="검색" />
-  </form>
-  <hr />
-  {% if query %}
-  <h2>{{ query }}의 뜻:</h2>
-  {{ result }} {% endif %}
-
-
-
   <div class="head">
     <span>Q{{ question.su }}.</span>
     <p>{{ question.invest }}</p>
