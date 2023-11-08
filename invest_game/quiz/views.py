@@ -1,5 +1,5 @@
 import json
-import random
+import requests, random
 from django.shortcuts import render, redirect
 
 from .models import Question
@@ -7,6 +7,7 @@ from .models import Rank
 from django.db.models import F
 from django.http import HttpResponse
 
+from .utils import findword, checkexists
 
 def start_game(request):
  
@@ -39,7 +40,41 @@ def start_game(request):
 
     
 
-def answer_question(request):
+# def answer_question(request):
+#     if 'questions' not in request.session or 'current_question_index' not in request.session:
+#         return render(request, 'quiz/quiz_result.html')
+
+#     questions = request.session['questions']
+#     current_question_index = request.session['current_question_index']
+#     correct_answers = request.session.get('correct_answers', 0)
+#     print(f"current_question_index: {current_question_index}") 
+    
+#     if request.method == 'POST':
+#         user_answer = request.POST.get('answer')
+#         if user_answer is not None:
+#             # 사용자가 제출한 답을 확인합니다.
+#             correct_answer = questions[current_question_index]['answer']
+#             if user_answer == str(correct_answer):
+#                 correct_answers += 1
+#                 request.session['correct_answers'] = correct_answers
+
+#             # 현재 문제의 사용자 답을 세션에 저장합니다.
+#             question = questions[current_question_index]
+#             question['user_answer'] = user_answer
+#             request.session[f'user_answer_{question["id"]}'] = user_answer
+
+#         current_question_index += 1
+#         request.session['current_question_index'] = current_question_index
+
+#         if current_question_index < len(questions):
+#             return render(request, 'quiz/question.html', {'question': questions[current_question_index]})
+#         else:
+#             return redirect('quiz_result')  # 모든 문제를 다 풀었을 때, 결과 화면으로 이동합니다.
+
+
+#     return render(request, 'quiz/question.html', {'question': questions[current_question_index], 'current_question_index': 1})
+
+def answer_question_re(request):
     if 'questions' not in request.session or 'current_question_index' not in request.session:
         return render(request, 'quiz/quiz_result.html')
 
@@ -49,27 +84,46 @@ def answer_question(request):
     print(f"current_question_index: {current_question_index}") 
     
     if request.method == 'POST':
-        user_answer = request.POST.get('answer')
-        if user_answer is not None:
-            # 사용자가 제출한 답을 확인합니다.
-            correct_answer = questions[current_question_index]['answer']
-            if user_answer == str(correct_answer):
-                correct_answers += 1
-                request.session['correct_answers'] = correct_answers
 
-            # 현재 문제의 사용자 답을 세션에 저장합니다.
-            question = questions[current_question_index]
-            question['user_answer'] = user_answer
-            request.session[f'user_answer_{question["id"]}'] = user_answer
+        if 'answer_form' in request.POST:  # 첫 번째 폼 제출 확인
+            user_answer = request.POST.get('answer')
+            if user_answer is not None:
+                # 사용자가 제출한 답을 확인합니다.
+                correct_answer = questions[current_question_index]['answer']
+                if user_answer == str(correct_answer):
+                    correct_answers += 1
+                    request.session['correct_answers'] = correct_answers
 
-        current_question_index += 1
-        request.session['current_question_index'] = current_question_index
+                # 현재 문제의 사용자 답을 세션에 저장합니다.
+                question = questions[current_question_index]
+                question['user_answer'] = user_answer
+                request.session[f'user_answer_{question["id"]}'] = user_answer
 
-        if current_question_index < len(questions):
-            return render(request, 'quiz/question.html', {'question': questions[current_question_index]})
-        else:
-            return redirect('quiz_result')  # 모든 문제를 다 풀었을 때, 결과 화면으로 이동합니다.
+            current_question_index += 1
+            request.session['current_question_index'] = current_question_index
 
+            if current_question_index < len(questions):
+                return render(request, 'quiz/question.html', {'question': questions[current_question_index]})
+            else:
+                return redirect('quiz_result')  # 모든 문제를 다 풀었을 때, 결과 화면으로 이동합니다.
+            
+        elif 'dict_word_re' in request.POST:  # 두 번째 폼 제출 확인
+            if request.method == 'POST':
+                query = request.POST.get('user_input')  # HTML 폼에서 입력한 단어를 가져옵니다
+                start = query[-1]
+
+                # ans = findword(start + '*')
+                ans_arr = checkexists(query)
+
+                # 원하는 결과 추출 및 정리
+                results = []
+                for ans in ans_arr:
+                    definition = ans.split('definition')[1][1:-3]
+                    results.append(definition)
+
+                return render(request, 'quiz/question.html', {'results': results})
+
+            return render(request, 'quiz/question.html', {'results': None})
 
     return render(request, 'quiz/question.html', {'question': questions[current_question_index], 'current_question_index': 1})
 
