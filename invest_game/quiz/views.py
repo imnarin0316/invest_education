@@ -84,7 +84,6 @@ def answer_question_re(request):
     print(f"current_question_index: {current_question_index}") 
     
     if request.method == 'POST':
-
         if 'answer_form' in request.POST:  # 첫 번째 폼 제출 확인
             user_answer = request.POST.get('answer')
             if user_answer is not None:
@@ -108,7 +107,6 @@ def answer_question_re(request):
                 return redirect('quiz_result')  # 모든 문제를 다 풀었을 때, 결과 화면으로 이동합니다.
             
         elif 'dict_word_re' in request.POST:  # 두 번째 폼 제출 확인
-            if request.method == 'POST':
                 query = request.POST.get('user_input')  # HTML 폼에서 입력한 단어를 가져옵니다
                 start = query[-1]
 
