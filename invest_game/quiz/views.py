@@ -97,7 +97,7 @@ def word_hint(request):
 
 
 def view_quiz_result(request):
-    rank_range = list(range(1, 5))
+     
     
     if 'questions' in request.session and 'correct_answers' in request.session:
         correct_answers = request.session['correct_answers'] * 1000
@@ -114,30 +114,28 @@ def view_quiz_result(request):
         if request.method == 'POST':
             nickname = request.POST.get('nickname')
             if nickname:
-                # Rank 모델에 닉네임과 점수 저장
-                Rank.objects.create(nickname=nickname, score=correct_answers)
+                # 결과 점수를 랭킹 데이터에 저장
+                user_rank, created = Rank.objects.get_or_create(nickname=nickname)
+                user_rank.score = correct_answers
+                user_rank.save()
 
-        # 상위 랭킹 정보 가져오기
+        # 상위 4위 랭킹 정보 가져오기
+        top_ranks = Rank.objects.order_by('-score')[:4]
+
+        context = {
+            'correct_answers': correct_answers,
+            'questions': questions,
+            'rank_range': rank_range,
+            'top_ranks': top_ranks,
+            'show_form': False  # By default, the form is hidden
+        }
+
+        # 현재 사용자가 상위 4위 안에 들었으면, 닉네임 입력 폼 표시
         user_rank = Rank.objects.filter(score=correct_answers).first()
-        
-        # 현재 사용자의 점수보다 높거나 같은 점수를 가진 사용자를 가져옴
-        top_ranks = (
-            Rank.objects
-            .filter(score__gte=correct_answers)
-            .order_by('-score', 'id')[:4]
-        )
+        if user_rank in top_ranks:
+            context['show_form'] = True  # Show the form for the user to enter their nickname
 
-        # 현재 사용자의 랭킹 정보 추가
-        if user_rank:
-            user_rank.rank = Rank.objects.filter(score__gt=correct_answers).count() + 1
-
-        
-        # 각 랭킹에 순위 정보 추가
-        for index, rank in enumerate(top_ranks, start=1):
-            rank.rank = index
-
-        return render(request, 'quiz/quiz_result.html', {'correct_answers': correct_answers, 'questions': questions, 'rank_range': rank_range, 'top_ranks': top_ranks})
+        return render(request, 'quiz/quiz_result.html', context)
     
     # 세션에 문제와 정답 개수가 없는 경우, 다시 질문 화면으로 이동합니다.
     return render(request, 'quiz/quiz_result.html', {'correct_answers': 0, 'questions': [], 'rank_range': rank_range})
-
