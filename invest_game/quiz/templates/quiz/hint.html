@@ -11,23 +11,28 @@
         </form>  
     </div>
     
-
-    {% if processed_result %}
+    <div class="word_result">
         <h3>검색 결과</h3>
-        <p>입력한 단어: {{ processed_result.query }}</p>
-        {% if processed_result.results %}
-            <ul>
-                {% for result in processed_result.results %}
-                    <li>{{ result }}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>검색 결과가 없습니다.</p>
-        {% endif %}
-    {% endif %}
 
-    <a href="{% url 'answer_question' %}">닫기</a>
-
+        {% if processed_result %}
+            
+            <p>{{ processed_result.query }}</p>
+            {% if processed_result.results %}
+                <ul>
+                    {% for result in processed_result.results %}
+                        <li>: {{ result }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>검색 결과가 없습니다.</p>
+            {% endif %}
+        {% endif %}    
+    </div>
+    
+    <div class="close">
+       <a href="{% url 'answer_question' %}">닫기</a>
+    </div>
+    
 </section>
 
 
