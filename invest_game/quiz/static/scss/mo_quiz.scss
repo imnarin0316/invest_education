@@ -88,6 +88,7 @@
       position: relative;
 
       svg {
+        width: 10px;
         margin-right: 4px;
       }
 
@@ -97,7 +98,7 @@
         transform: translateX(-50%);
       }
 
-      button {
+      a {
         width: 70px;
         height: 30px;
         border-radius: 20px;
@@ -106,6 +107,10 @@
         font-size: 16px;
         color: #000;
         font-family: Suez One;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
 

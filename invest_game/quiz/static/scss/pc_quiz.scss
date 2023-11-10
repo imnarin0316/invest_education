@@ -93,6 +93,7 @@
       position: relative;
 
       svg {
+        width: 10px;
         margin-right: 4px;
       }
 
@@ -102,7 +103,7 @@
         transform: translateX(-50%);
       }
 
-      button {
+      a {
         width: 70px;
         height: 30px;
         border-radius: 20px;
@@ -111,6 +112,10 @@
         font-size: 16px;
         color: #000;
         font-family: Suez One;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     }
 
@@ -176,7 +181,7 @@
 
       .next_btn {
         padding: 2px 8px;
-        width: 80px;
+        width: 90px;
         height: 25px;
         display: flex;
         align-items: center;
@@ -189,7 +194,7 @@
         right: 0;
 
         input {
-          width: 65px;
+          width: 75px;
           background: none;
           border: none;
           color: #fff;

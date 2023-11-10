@@ -72,18 +72,18 @@ def checkexists(query):
     else:
         return ''
 
-query = input(' > ')
+# query = input(' > ')
 
-start = query[len(query)-1]
+# start = query[len(query)-1]
 
 # ans  = checkexists(query)
-ans_arr = checkexists(query)
+# ans_arr = checkexists(query)
 
 # ans = findword(start + '*')
 
-ans_arr
+# ans_arr
 
 # 정규표현식으로 바꾸기
-results=[]
-for ans in ans_arr:
-  print(ans.split('definition')[1][1:-3])
+# results=[]
+# for ans in ans_arr:
+#   print(ans.split('definition')[1][1:-3])

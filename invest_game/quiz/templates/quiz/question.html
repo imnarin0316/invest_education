@@ -6,7 +6,7 @@
   <div class="head">
     <span>Q{{ question.su }}.</span>
     <p>{{ question.invest }}</p>
-    <button>
+    <a href="{% url 'word_hint' %}">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="8"
@@ -22,7 +22,7 @@
         />
       </svg>
       Hint
-    </button>
+    </a>
   </div>
 
   <div class="content">
@@ -30,7 +30,6 @@
     <p>{{ question.lead }}</p>
   </div>
 
-  <!-- <form method="post" action="{% url 'answer_question' %}" id="answer_form"> -->
   <form method="post" action="{% url 'answer_question' %}" id="answer_form">
     {% csrf_token %}
     <label>
@@ -62,22 +61,8 @@
   </form>
 </section>
 
-<form method="post" action="{% url 'answer_question' %}" id="dict_word_re">
-  {% csrf_token %}
-  <input type="text" name="user_input" />
-  <input type="submit" name="dict_n_btn" id="dict_btn" value="검색"  />
-</form>
 
-{% if results %}
-    <h2>검색 결과:</h2>
-    <ul>
-        {% for definition in results %}
-            <li>{{ definition }}</li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>결과가 없습니다.</p>
-{% endif %}
+
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {

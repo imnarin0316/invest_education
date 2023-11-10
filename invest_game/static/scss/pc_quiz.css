@@ -67,19 +67,23 @@
     font-weight: 700;
     position: relative; }
     .quiz_frame .head svg {
+      width: 10px;
       margin-right: 4px; }
     .quiz_frame .head p {
       position: absolute;
       left: 50%;
       transform: translateX(-50%); }
-    .quiz_frame .head button {
+    .quiz_frame .head a {
       width: 70px;
       height: 30px;
       border-radius: 20px;
       background: #ffd66c;
       font-size: 16px;
       color: #000;
-      font-family: Suez One; }
+      font-family: Suez One;
+      display: flex;
+      justify-content: center;
+      align-items: center; }
   .quiz_frame .content {
     width: calc(100% - 40px);
     min-height: 250px;
@@ -126,7 +130,7 @@
       color: #000; }
     .quiz_frame form .next_btn {
       padding: 2px 8px;
-      width: 80px;
+      width: 90px;
       height: 25px;
       display: flex;
       align-items: center;
@@ -137,7 +141,7 @@
       bottom: -42px;
       right: 0; }
       .quiz_frame form .next_btn input {
-        width: 65px;
+        width: 75px;
         background: none;
         border: none;
         color: #fff;

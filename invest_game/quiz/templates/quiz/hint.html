@@ -1,0 +1,28 @@
+{% extends './_base.html' %} {% block content %}
+
+<h1>힌트</h1>
+
+<form method="post" action="{% url 'word_hint' %}" id="word_hint">
+    {% csrf_token %}
+    <input type="text" name="user_input" />
+    <input type="submit" name="dict_n_btn" id="dict_btn" value="검색"  />
+</form>
+
+{% if processed_result %}
+    <h3>검색 결과</h3>
+    <p>입력한 단어: {{ processed_result.query }}</p>
+    {% if processed_result.results %}
+        <ul>
+            {% for result in processed_result.results %}
+                <li>{{ result }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>검색 결과가 없습니다.</p>
+    {% endif %}
+{% endif %}
+
+<a href="{% url 'answer_question' %}">닫기</a>
+
+
+{% endblock %}
