@@ -1,75 +1,64 @@
-{% extends './_base.html' %}
-{% load static %}
-{% block content %}
+{% extends './_base.html' %} {% load static %} {% block content %}
 
-  <div class="score">
-    <h2>퀴즈 점수</h2>
-    <p>SCORE:
-      {{ correct_answers }}</p>
-  </div>
+<div class="score">
+  <h2>퀴즈 점수</h2>
+  <p>SCORE: {{ correct_answers }}</p>
+</div>
 
-  <div class="rank">
-    <h2>명예의 전당</h2>
-    {% if show_form %}
-    <form id="rankForm" method="post" action="{% url 'quiz_result' %}">
-        {% csrf_token %}
-        <label for="nickname">닉네임:</label>
-        <input type="text" id="nickname" name="nickname">
-        <button type="submit">랭킹 저장</button>
-    </form>
-    {% endif %}
+<div class="rank">
+  <h2>명예의 전당</h2>
+  {% if show_form %}
+  <form id="rankForm" method="post" action="{% url 'quiz_result' %}">
+    {% csrf_token %}
+    <label for="nickname">닉네임:</label>
+    <input type="text" id="nickname" name="nickname" />
+    <button type="submit">랭킹 저장</button>
+  </form>
+  {% endif %}
 
+  <ul>
+    {% if top_ranks %} {% for rank in top_ranks %}
+    <li>
+      <div>
+        <span>{{ rank.rank }}위</span>
+        <p>{{ rank.nickname }}</p>
+      </div>
+      <h4>{{ rank.score }}점</h4>
+    </li>
+    {% endfor %} {% endif %}
+  </ul>
+</div>
+
+<button id="note" onclick="ModalOpen()">틀린 문제 확인하기</button>
+
+<a href="/" class="newgame">새 게임 시작</a>
+
+<div id="modal">
+  <button onclick="ModalOpen()">닫기 X</button>
+  <div class="modal_frame">
+    <h2>다시 체크해봅시다.</h2>
     <ul>
-      {% if top_ranks %}
-          {% for rank in top_ranks %}
-            <li> 
-              <div>
-                <span>{{ rank.rank }}위</span>  
-                <p>{{ rank.nickname }}</p>
-              </div>
-              <h4>{{ rank.score }}점</h4>
-            </li>
-          {% endfor %}
-      {% endif %}
+      {% for question in questions %} {% if question.correct_answer !=
+      question.user_answer %}
+      <li>
+        <div class="q_head">
+          <span> {{ question.idxx }}번 문제</span>
+          <h5>{{ question.headline }}</h5>
+        </div>
+        <p class="q_con">{{ question.lead }}</p>
+        <p class="q_dab">
+          정답: {{ question.invest }} {% if question.correct_answer %} 상승 {%
+          else %} 하락 {% endif %}
+        </p>
+      </li>
+      {% endif %} {% endfor %}
     </ul>
   </div>
 
+  <div class="modal_bg"></div>
+</div>
 
-  <button id="note" onclick="ModalOpen()">틀린 문제 확인하기</button>
-
-  <a href="/" class="newgame">새 게임 시작</a>
-
-  <div id="modal">
-    <button onclick="ModalOpen()">닫기 X</button>
-    <div class="modal_frame">
-      <h2>다시 체크해봅시다.</h2>
-      <ul>
-        {% for question in questions %}
-          {% if question.correct_answer != question.user_answer %}
-            <li>
-              <div class="q_head">
-              <span>
-                {{ question.idxx }}번 문제</span>
-              <h5>{{ question.headline }}</h5>
-              </div>
-              <p class="q_con">{{ question.lead }}</p>
-              <p class="q_dab">정답: {{ question.invest }}
-                {% if question.correct_answer %}
-                  상승
-                {% else %}
-                  하락
-                {% endif %}
-              </p>
-            </li>
-          {% endif %}
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div class="modal_bg"></div>
-  </div>
-
-  <script>
+<script>
     const ModalOpen = () => {
       let modalPop = document.getElementById('modal')
       modalPop
@@ -118,22 +107,20 @@
     const rankForm = document.getElementById("rankForm");
     const nicknameInput = document.getElementById("nickname");
     const submitButton = rankForm.querySelector("button");
-  
+
     // 사용자의 랭킹 정보를 가져와서 점수를 확인합니다.
     const userRank = {{ user_rank.rank|default:"0" }}; // Django 변수를 JavaScript로 가져옵니다.
-  
+
     if (userRank > 0) {
       // 사용자의 랭킹이 0보다 큰 경우 (랭킹 안에 들었을 경우) 입력란을 보이게 합니다.
       rankForm.style.display = "block";
     }
-  
+
     // 닉네임을 입력한 경우에만 랭킹 저장 버튼을 활성화합니다.
     nicknameInput.addEventListener("input", function () {
       submitButton.disabled = !nicknameInput.value;
     });
   });
-  
 </script>
 
-  
 {% endblock %}
