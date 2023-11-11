@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from .models import Question
 from .models import Rank
 from django.db.models import F
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from .utils import findword, checkexists
 
@@ -95,10 +95,7 @@ def word_hint(request):
 
     return render(request, 'quiz/hint.html', {'processed_result': processed_result})
 
-
 def view_quiz_result(request):
-     
-    
     if 'questions' in request.session and 'correct_answers' in request.session:
         correct_answers = request.session['correct_answers'] * 1000
         questions = request.session['questions']
@@ -119,23 +116,23 @@ def view_quiz_result(request):
                 user_rank.score = correct_answers
                 user_rank.save()
 
-        # 상위 4위 랭킹 정보 가져오기
-        top_ranks = Rank.objects.order_by('-score')[:4]
+                return redirect('quiz_result') 
+            return render(request, 'quiz/quiz_result.html', {'form_visible': True})  # 폼이 보이는 페이지 렌더링
+             
+        # 랭킹 업데이트 코드
+        top_ranks = Rank.objects.order_by('-score')[:10]  # 상위 10명을 가져옴
+
+        # 각 랭킹에 순위를 부여하고 이를 템플릿으로 전달
+        for idx, rank in enumerate(top_ranks, start=1):
+            rank.rank = idx
 
         context = {
             'correct_answers': correct_answers,
             'questions': questions,
-            'rank_range': rank_range,
             'top_ranks': top_ranks,
-            'show_form': False  # By default, the form is hidden
         }
-
-        # 현재 사용자가 상위 4위 안에 들었으면, 닉네임 입력 폼 표시
-        user_rank = Rank.objects.filter(score=correct_answers).first()
-        if user_rank in top_ranks:
-            context['show_form'] = True  # Show the form for the user to enter their nickname
 
         return render(request, 'quiz/quiz_result.html', context)
     
     # 세션에 문제와 정답 개수가 없는 경우, 다시 질문 화면으로 이동합니다.
-    return render(request, 'quiz/quiz_result.html', {'correct_answers': 0, 'questions': [], 'rank_range': rank_range})
+    return render(request, 'quiz/quiz_result.html', {'correct_answers': 0, 'questions': []})
