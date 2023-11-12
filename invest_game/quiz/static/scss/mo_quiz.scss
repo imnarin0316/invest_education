@@ -242,7 +242,7 @@
         align-items: center;
 
         div{
-          width:calc(100% - 120px);
+          width:calc(100% - 90px);
           display: flex;
           justify-self: start;
           align-items: center;
@@ -255,19 +255,19 @@
 
           input {
             font-size: 16px;
-            margin-left: 10px;
             border: none;
             height: 30px;
-            width: calc(100% - 50px);
+            width: calc(100% - 80px);
           }
         }
 
         button {
-          width: 100px;
+          width: 85px;
           background-color: #888;
           color: #fff;
           height: 30px;
           border-radius: 12px;
+          font-size: 14px;
         }
         
       }
