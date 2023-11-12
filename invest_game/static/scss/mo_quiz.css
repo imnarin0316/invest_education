@@ -168,6 +168,34 @@
     border: 1px solid #000;
     padding: 16px 16px 20px 16px;
     margin-top: 16px; }
+    .rank .rank_form {
+      width: 100%;
+      padding: 0 0 20px 0; }
+      .rank .rank_form #rankForm {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; }
+        .rank .rank_form #rankForm div {
+          width: calc(100% - 120px);
+          display: flex;
+          justify-self: start;
+          align-items: center; }
+          .rank .rank_form #rankForm div label {
+            font-size: 16px;
+            width: 50px;
+            text-align: left; }
+          .rank .rank_form #rankForm div input {
+            font-size: 16px;
+            margin-left: 10px;
+            border: none;
+            height: 30px;
+            width: calc(100% - 50px); }
+        .rank .rank_form #rankForm button {
+          width: 100px;
+          background-color: #888;
+          color: #fff;
+          height: 30px;
+          border-radius: 12px; }
     .rank h2 {
       font-size: 20px;
       border-bottom: 1px solid #000;

@@ -10,14 +10,20 @@
 <div class="rank">
   <h2>명예의 전당</h2>
 
-
-  <form id="rankForm" method="post" action="{% url 'quiz_result' %}">
-    {% csrf_token %}
-    <label for="nickname">닉네임:</label>
-    <input type="text" id="nickname" name="nickname" />
-    <button type="submit">랭킹 저장</button>
-  </form>
-
+  <div class="rank_form">
+    <form id="rankForm"
+    method="post" 
+    action="{% url 'quiz_result' %}" >
+      {% csrf_token %}
+      <div>
+        <label for="nickname">닉네임:</label>
+        <input type="text" id="nickname" name="nickname" placeholder="이곳에 닉네임을 입력하세요." />
+      </div>
+      
+      <button type="submit">닉네임 저장</button>
+    </form>
+  </div>
+  
 
   {% if top_ranks %}
     <ul>
@@ -77,27 +83,45 @@
   };
 
   document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form");
+  const form = document.querySelector("form");
 
-    form.addEventListener("submit", function (event) {
-      event.preventDefault(); // 기본 제출 동작을 막음
-      const nicknameInput = document.getElementById("nickname");
-      const nickname = nicknameInput.value;
+  form.addEventListener("submit", function (event) {
+    event.preventDefault(); // 기본 제출 동작을 막음
+    const nicknameInput = document.getElementById("nickname");
+    const nickname = nicknameInput.value;
 
-      if (nickname) {
-        // 폼을 서버로 제출 (Ajax 요청)
-        fetch("{% url 'quiz_result' %}", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "X-CSRFToken": "{{ csrf_token }}",
-          },
-          body: `nickname=${nickname}`,
+    if (nickname) {
+      // 폼을 서버로 제출 (Ajax 요청)
+      fetch("{% url 'quiz_result' %}", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: `nickname=${nickname}`,
+      })
+        .then((response) => {
+          if (response.ok) {
+            // 성공적으로 응답을 받은 경우
+            return response.json();
+          }
+          throw new Error('Network response was not ok.');
         })
-          .then((response) => response.json())
-      }
-    });
+        .then((data) => {
+          if (data.message === "Success") {
+            alert("랭킹이 저장되었습니다.");
+            location.reload(); // 페이지 리로드
+          } else {
+            alert("랭킹을 저장하지 못했습니다. 다시 시도하세요.");
+          }
+        })
+        .catch((error) => {
+          console.error("랭킹 저장 중 오류 발생:", error);
+        });
+    }
   });
+});
+
 </script>
 
 {% endblock %}

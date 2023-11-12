@@ -232,6 +232,47 @@
     padding: 16px 16px 20px 16px;
     margin-top: 16px;
 
+    .rank_form {
+      width: 100%;
+      padding: 0 0 20px 0;
+
+      #rankForm {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        div{
+          width:calc(100% - 120px);
+          display: flex;
+          justify-self: start;
+          align-items: center;
+
+          label {
+            font-size: 16px;
+            width: 50px;
+            text-align: left;
+          }
+
+          input {
+            font-size: 16px;
+            margin-left: 10px;
+            border: none;
+            height: 30px;
+            width: calc(100% - 50px);
+          }
+        }
+
+        button {
+          width: 100px;
+          background-color: #888;
+          color: #fff;
+          height: 30px;
+          border-radius: 12px;
+        }
+        
+      }
+    }
+
     h2 {
       font-size: 20px;
       border-bottom: 1px solid #000;

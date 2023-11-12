@@ -96,6 +96,7 @@ def word_hint(request):
     return render(request, 'quiz/hint.html', {'processed_result': processed_result})
 
 def view_quiz_result(request):
+
     if 'questions' in request.session and 'correct_answers' in request.session:
         correct_answers = request.session['correct_answers'] * 1000
         questions = request.session['questions']
@@ -115,10 +116,9 @@ def view_quiz_result(request):
                 user_rank, created = Rank.objects.get_or_create(nickname=nickname)
                 user_rank.score = correct_answers
                 user_rank.save()
-
-                return redirect('quiz_result') 
-            return render(request, 'quiz/quiz_result.html', {'form_visible': True})  # 폼이 보이는 페이지 렌더링
              
+                return JsonResponse({'message': 'Success'})
+               
         # 랭킹 업데이트 코드
         top_ranks = Rank.objects.order_by('-score')[:10]  # 상위 10명을 가져옴
 
@@ -136,3 +136,5 @@ def view_quiz_result(request):
     
     # 세션에 문제와 정답 개수가 없는 경우, 다시 질문 화면으로 이동합니다.
     return render(request, 'quiz/quiz_result.html', {'correct_answers': 0, 'questions': []})
+
+# Rank.objects.all().delete() #랭킹 데이터 모두 삭제
